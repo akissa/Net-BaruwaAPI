@@ -24,6 +24,7 @@ my $builder = Module::Build->new(
         'Test::More' => 0,
     },
     requires => {
+        'Types::Standard'       => 0,
         'Moo'                   => 0,
         'Types::Standard'       => 0,
         'JSON::MaybeXS'         => 0,
