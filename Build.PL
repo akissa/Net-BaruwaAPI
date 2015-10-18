@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+# vim: ai ts=4 sts=4 et sw=4
+# Net::BaruwaAPI Perl bindings for the Baruwa REST API
+# Copyright (C) 2015 Andrew Colin Kissa <andrew@topdog.za.net>
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this file,
+# You can obtain one at http://mozilla.org/MPL/2.0/.
 use 5.006;
 use strict;
 use warnings;
@@ -16,8 +24,12 @@ my $builder = Module::Build->new(
         'Test::More' => 0,
     },
     requires => {
-        #'ABC'              => 1.6,
-        #'Foo::Bar::Module' => 5.0401,
+        'Moo'                   => 0,
+        'Types::Standard'       => 0,
+        'JSON::MaybeXS'         => 0,
+        'LWP::UserAgent'        => 0,
+        'HTTP::Request'         => 0,
+        'LWP::Protocol::https'  => 0,
     },
     add_to_cleanup     => [ 'Net-BaruwaAPI-*' ],
     create_makefile_pl => 'traditional',
