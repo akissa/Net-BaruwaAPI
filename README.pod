@@ -4,21 +4,26 @@
 
 =head1 Net-BaruwaAPI
 
-Perl bindings for Baruwa REST API
+Perl bindings for the Baruwa REST API
 
 =for HTML <a href="https://travis-ci.org/akissa/Net-BaruwaAPI"><img src="https://travis-ci.org/akissa/Net-BaruwaAPI.svg?branch=master"></a>
 
 
-=head2 INSTALLATION
+=head2 Installation
 
-To install this module, run the following commands:
+You can install this module with a CPAN client, which will resolve
+and install the dependencies:
+
+	cpan Net::BaruwaAPI
+
+To manually install this module, run the following commands:
 
 	perl Build.PL
 	./Build
 	./Build test
 	./Build install
 
-=head2 SUPPORT AND DOCUMENTATION
+=head2 Support and Documentation
 
 After installing, you can find documentation for this module with the
 perldoc command.
@@ -39,8 +44,24 @@ You can also look for information at:
     Search CPAN
         http://search.cpan.org/dist/Net-BaruwaAPI/
 
+=head2 Contributing
 
-=head2 LICENSE AND COPYRIGHT
+=over 4
+
+=item 1. Fork it (https://github.com/akissa/Net-BaruwaAPI/fork)
+
+=item 2. Create your feature branch (`git checkout -b my-new-feature`)
+
+=item 3. Commit your changes (`git commit -am 'Add some feature'`)
+
+=item 4. Push to the branch (`git push origin my-new-feature`)
+
+=item 5. Create new Pull Request
+
+=back
+
+
+=head2 License and Copyright
 
 Copyright (C) 2015 Andrew Colin Kissa
 
