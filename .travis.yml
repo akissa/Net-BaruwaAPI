@@ -9,6 +9,9 @@ perl:
 install:
     - cpanm -v --installdeps --notest .
 script: "perl Build.PL; ./Build test"
+branches:
+    only:
+        - master
 notifications:
     email:
         on_success: change
