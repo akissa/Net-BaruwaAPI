@@ -31,3 +31,4 @@
 ^MYMETA\.yml$
 ^MYMETA\.json$
 ^ignore\.txt$
+^.travis\.yml$
