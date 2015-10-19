@@ -46,7 +46,7 @@ You can also look for information at:
 
 =head2 Contributing
 
-=over 4
+=over
 
 =item 1. Fork it (https://github.com/akissa/Net-BaruwaAPI/fork)
 
