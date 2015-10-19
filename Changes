@@ -1,4 +1,7 @@
 Revision history for Net-BaruwaAPI
 
+0.02    19-10-2015
+        Support API versioning
+
 0.01    18-10-2015
         First version, initial release
