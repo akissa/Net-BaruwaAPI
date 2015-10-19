@@ -16,8 +16,10 @@ use LWP::UserAgent;
 use Types::Standard qw(Str InstanceOf Object);
 use Moo;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $AUTHORITY = 'cpan:DATOPDOG';
+
+my $api_path = '/api/v1';
 
 has 'api_url' => (is => 'rw', isa => Str, predicate => 'has_api_url');
 
@@ -91,242 +93,242 @@ sub _call {
 
 sub get_users {
     my ($self) = @_;
-    return $self->_call('GET', '/users');
+    return $self->_call('GET', $api_path . '/users');
 }
 
 sub get_user {
     my ($self, $userid) = @_;
-    return $self->_call('GET', '/users/' . $userid);
+    return $self->_call('GET', $api_path . '/users/' . $userid);
 }
 
 sub create_user {
     my ($self, $data) = @_;
-    return $self->_call('POST', '/users', $data);
+    return $self->_call('POST', $api_path . '/users', $data);
 }
 
 sub update_user {
     my ($self, $data) = @_;
-    return $self->_call('PUT', '/users', $data);
+    return $self->_call('PUT', $api_path . '/users', $data);
 }
 
 sub delete_user {
     my ($self, $data) = @_;
-    return $self->_call('DELETE', '/users', $data);
+    return $self->_call('DELETE', $api_path . '/users', $data);
 }
 
 sub set_user_passwd {
     my ($self, $userid, $data) = @_;
-    return $self->_call('POST', '/users/chpw/' . $userid);
+    return $self->_call('POST', $api_path . '/users/chpw/' . $userid);
 }
 
 sub get_aliases {
     my ($self, $addressid) = @_;
-    return $self->_call('GET', '/aliasaddresses/' . $addressid);
+    return $self->_call('GET', $api_path . '/aliasaddresses/' . $addressid);
 }
 
 sub create_alias {
     my ($self, $userid, $data) = @_;
-    return $self->_call('POST', '/aliasaddresses/' . $userid, $data);
+    return $self->_call('POST', $api_path . '/aliasaddresses/' . $userid, $data);
 }
 
 sub update_alias {
     my ($self, $addressid, $data) = @_;
-    return $self->_call('PUT', '/aliasaddresses/' . $addressid, $data);
+    return $self->_call('PUT', $api_path . '/aliasaddresses/' . $addressid, $data);
 }
 
 sub delete_alias {
     my ($self, $addressid, $data) = @_;
-    return $self->_call('DELETE', '/aliasaddresses/' . $addressid, $data);
+    return $self->_call('DELETE', $api_path . '/aliasaddresses/' . $addressid, $data);
 }
 
 sub get_domains {
     my ($self) = @_;
-    return $self->_call('GET', '/domains');
+    return $self->_call('GET', $api_path . '/domains');
 }
 
 sub get_domain {
     my ($self, $domainid) = @_;
-    return $self->_call('GET', '/domains/' . $domainid);
+    return $self->_call('GET', $api_path . '/domains/' . $domainid);
 }
 
 sub create_domain {
     my ($self, $data) = @_;
-    return $self->_call('POST', '/domains', $data);
+    return $self->_call('POST', $api_path . '/domains', $data);
 }
 
 sub update_domain {
     my ($self, $domainid, $data) = @_;
-    return $self->_call('PUT', '/domains/' . $domainid, $data);
+    return $self->_call('PUT', $api_path . '/domains/' . $domainid, $data);
 }
 
 sub delete_domain {
     my ($self, $domainid) = @_;
-    return $self->_call('DELETE', '/domains/' . $domainid);
+    return $self->_call('DELETE', $api_path . '/domains/' . $domainid);
 }
 
 sub get_domainaliases {
     my ($self, $domainid) = @_;
-    return $self->_call('GET', '/domainaliases/' . $domainid);
+    return $self->_call('GET', $api_path . '/domainaliases/' . $domainid);
 }
 
 sub get_domainalias {
     my ($self, $domainid, $aliasid) = @_;
-    return $self->_call('GET', '/domainaliases/' . $domainid . '/' . $aliasid);
+    return $self->_call('GET', $api_path . '/domainaliases/' . $domainid . '/' . $aliasid);
 }
 
 sub create_domainalias {
     my ($self, $domainid, $data) = @_;
-    return $self->_call('POST', '/domainaliases/' . $domainid, $data);
+    return $self->_call('POST', $api_path . '/domainaliases/' . $domainid, $data);
 }
 
 sub update_domainalias {
     my ($self, $domainid, $aliasid, $data) = @_;
-    return $self->_call('PUT', '/domainaliases/' . $domainid . '/' . $aliasid, $data);
+    return $self->_call('PUT', $api_path . '/domainaliases/' . $domainid . '/' . $aliasid, $data);
 }
 
 sub delete_domainalias {
     my ($self, $domainid, $aliasid, $data) = @_;
-    return $self->_call('DELETE', '/domainaliases/' . $domainid . '/' . $aliasid, $data);
+    return $self->_call('DELETE', $api_path . '/domainaliases/' . $domainid . '/' . $aliasid, $data);
 }
 
 sub get_deliveryservers {
     my ($self, $domainid) = @_;
-    return $self->_call('GET', '/deliveryservers/' . $domainid);
+    return $self->_call('GET', $api_path . '/deliveryservers/' . $domainid);
 }
 
 sub get_deliveryserver {
     my ($self, $domainid, $serverid) = @_;
-    return $self->_call('GET', '/deliveryservers/' . $domainid . '/' . $serverid);
+    return $self->_call('GET', $api_path . '/deliveryservers/' . $domainid . '/' . $serverid);
 }
 
 sub create_deliveryserver {
     my ($self, $domainid) = @_;
-    return $self->_call('POST', '/deliveryservers/' . $domainid);
+    return $self->_call('POST', $api_path . '/deliveryservers/' . $domainid);
 }
 
 sub update_deliveryserver {
     my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('PUT', '/deliveryservers/' . $domainid . '/' . $serverid, $data);
+    return $self->_call('PUT', $api_path . '/deliveryservers/' . $domainid . '/' . $serverid, $data);
 }
 
 sub delete_deliveryserver {
     my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('DELETE', '/deliveryservers/' . $domainid . '/' . $serverid, $data);
+    return $self->_call('DELETE', $api_path . '/deliveryservers/' . $domainid . '/' . $serverid, $data);
 }
 
 sub get_authservers {
     my ($self, $domainid) = @_;
-    return $self->_call('GET', '/authservers/' . $domainid);
+    return $self->_call('GET', $api_path . '/authservers/' . $domainid);
 }
 
 sub get_authserver {
     my ($self, $domainid, $serverid) = @_;
-    return $self->_call('GET', '/authservers/' . $domainid . '/' . $serverid);
+    return $self->_call('GET', $api_path . '/authservers/' . $domainid . '/' . $serverid);
 }
 
 sub create_authserver {
     my ($self, $domainid, $data) = @_;
-    return $self->_call('POST', '/authservers/' . $domainid, $data);
+    return $self->_call('POST', $api_path . '/authservers/' . $domainid, $data);
 }
 
 sub update_authserver {
     my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('PUT', '/authservers/' . $domainid . '/' . $serverid, $data);
+    return $self->_call('PUT', $api_path . '/authservers/' . $domainid . '/' . $serverid, $data);
 }
 
 sub delete_authserver {
     my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('DELETE', '/authservers/' . $domainid . '/' . $serverid, $data);
+    return $self->_call('DELETE', $api_path . '/authservers/' . $domainid . '/' . $serverid, $data);
 }
 
 sub get_ldapsettings {
     my ($self, $domainid, $serverid, $settingsid) = @_;
-    return $self->_call('GET', '/ldapsettings/' . $domainid . '/' . $serverid . '/' . $settingsid);
+    return $self->_call('GET', $api_path . '/ldapsettings/' . $domainid . '/' . $serverid . '/' . $settingsid);
 }
 
 sub create_ldapsettings {
     my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('POST', '/ldapsettings/' . $domainid . '/' . $serverid, $data);
+    return $self->_call('POST', $api_path . '/ldapsettings/' . $domainid . '/' . $serverid, $data);
 }
 
 sub update_ldapsettings {
     my ($self, $domainid, $serverid, $settingsid, $data) = @_;
-    return $self->_call('PUT', '/ldapsettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
+    return $self->_call('PUT', $api_path . '/ldapsettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
 }
 
 sub delete_ldapsettings {
     my ($self, $domainid, $serverid, $settingsid, $data) = @_;
-    return $self->_call('DELETE', '/ldapsettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
+    return $self->_call('DELETE', $api_path . '/ldapsettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
 }
 
 sub get_radiussettings {
     my ($self, $domainid, $serverid, $settingsid) = @_;
-    return $self->_call('GET', '/radiussettings/' . $domainid . '/' . $serverid . '/' . $settingsid);
+    return $self->_call('GET', $api_path . '/radiussettings/' . $domainid . '/' . $serverid . '/' . $settingsid);
 }
 
 sub create_radiussettings {
     my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('POST', '/radiussettings/' . $domainid . '/' . $serverid, $data);
+    return $self->_call('POST', $api_path . '/radiussettings/' . $domainid . '/' . $serverid, $data);
 }
 
 sub update_radiussettings {
     my ($self, $domainid, $serverid, $settingsid, $data) = @_;
-    return $self->_call('PUT', '/radiussettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
+    return $self->_call('PUT', $api_path . '/radiussettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
 }
 
 sub delete_radiussettings {
     my ($self, $domainid, $serverid, $settingsid, $data) = @_;
-    return $self->_call('DELETE', '/radiussettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
+    return $self->_call('DELETE', $api_path . '/radiussettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
 }
 
 sub get_organizations {
     my ($self) = @_;
-    return $self->_call('GET', '/organizations');
+    return $self->_call('GET', $api_path . '/organizations');
 }
 
 sub get_organization {
     my ($self, $orgid) = @_;
-    return $self->_call('GET', '/organizations/' . $orgid);
+    return $self->_call('GET', $api_path . '/organizations/' . $orgid);
 }
 
 sub create_organization {
     my ($self, $data) = @_;
-    return $self->_call('POST', '/organizations', $data);
+    return $self->_call('POST', $api_path . '/organizations', $data);
 }
 
 sub update_organization {
     my ($self, $orgid, $data) = @_;
-    return $self->_call('PUT', '/organizations/' . $orgid, $data);
+    return $self->_call('PUT', $api_path . '/organizations/' . $orgid, $data);
 }
 
 sub delete_organization {
     my ($self, $orgid) = @_;
-    return $self->_call('DELETE', '/organizations/' . $orgid);
+    return $self->_call('DELETE', $api_path . '/organizations/' . $orgid);
 }
 
 sub get_relay {
     my ($self, $relayid) = @_;
-    return $self->_call('GET', '/relays/' . $relayid);
+    return $self->_call('GET', $api_path . '/relays/' . $relayid);
 }
 
 sub create_relay {
     my ($self, $orgid, $data) = @_;
-    return $self->_call('POST', '/relays/' . $orgid, $data);
+    return $self->_call('POST', $api_path . '/relays/' . $orgid, $data);
 }
 
 sub update_relay {
     my ($self, $relayid, $data) = @_;
-    return $self->_call('PUT', '/relays/' . $relayid, $data);
+    return $self->_call('PUT', $api_path . '/relays/' . $relayid, $data);
 }
 
 sub delete_relay {
     my ($self, $relayid, $data) = @_;
-    return $self->_call('DELETE', '/relays/' . $relayid, $data);
+    return $self->_call('DELETE', $api_path . '/relays/' . $relayid, $data);
 }
 
 sub get_status {
     my ($self) = @_;
-    return $self->_call('GET', '/status');
+    return $self->_call('GET', $api_path . '/status');
 }
 
 no Moo;
@@ -341,11 +343,11 @@ Net::BaruwaAPI - Perl bindings for Baruwa REST API
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
@@ -363,7 +365,7 @@ Read L<Net::BaruwaAPI> for API usage.
     use Net::BaruwaAPI;
     my $api = Net::BaruwaAPI->new(
         api_token => 'oauth token',
-        api_url => 'https://baruwa.example.com/api/v1'
+        api_url => 'https://baruwa.example.com'
     );
 
 =head1 METHODS
