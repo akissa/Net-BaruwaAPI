@@ -6,6 +6,8 @@
 
 Perl bindings for Baruwa REST API
 
+=for HTML <a href="https://travis-ci.org/akissa/Net-BaruwaAPI"><img src="https://travis-ci.org/akissa/Net-BaruwaAPI.svg?branch=master"></a>
+
 
 =head2 INSTALLATION
 
