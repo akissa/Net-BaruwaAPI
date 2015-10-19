@@ -46,17 +46,17 @@ You can also look for information at:
 
 =head2 Contributing
 
-=over
+=over 4
 
-=item 1. Fork it (https://github.com/akissa/Net-BaruwaAPI/fork)
+=item * Fork it (https://github.com/akissa/Net-BaruwaAPI/fork)
 
-=item 2. Create your feature branch (`git checkout -b my-new-feature`)
+=item * Create your feature branch (`git checkout -b my-new-feature`)
 
-=item 3. Commit your changes (`git commit -am 'Add some feature'`)
+=item * Commit your changes (`git commit -am 'Add some feature'`)
 
-=item 4. Push to the branch (`git push origin my-new-feature`)
+=item * Push to the branch (`git push origin my-new-feature`)
 
-=item 5. Create new Pull Request
+=item * Create new Pull Request
 
 =back
 
