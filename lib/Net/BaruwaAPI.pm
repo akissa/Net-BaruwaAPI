@@ -18,7 +18,7 @@ use Type::Params qw/compile/;
 use Types::Standard qw(Str InstanceOf Object Int Bool Dict Num ArrayRef);
 use Moo;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 our $AUTHORITY = 'cpan:DATOPDOG';
 
 my $api_path = '/api/v1';
@@ -640,11 +640,11 @@ Net::BaruwaAPI - Perl bindings for Baruwa REST API
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 =head1 SYNOPSIS
