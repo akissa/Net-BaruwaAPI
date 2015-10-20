@@ -8,12 +8,14 @@
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 package Net::BaruwaAPI;
 
-use 5.006;
+# use utf8;
+use feature 'state';
 use JSON::MaybeXS;
 use HTTP::Request;
 use Carp qw/croak/;
 use LWP::UserAgent;
-use Types::Standard qw(Str InstanceOf Object);
+use Type::Params qw/compile/;
+use Types::Standard qw(Str InstanceOf Object Int Bool Dict Num ArrayRef);
 use Moo;
 
 our $VERSION = '0.02';
@@ -21,9 +23,9 @@ our $AUTHORITY = 'cpan:DATOPDOG';
 
 my $api_path = '/api/v1';
 
-has 'api_url' => (is => 'rw', isa => Str, predicate => 'has_api_url');
+has 'api_url' => (is => 'ro', isa => Str, predicate => 'has_api_url', required => 1);
 
-has 'api_token' => (is => 'rw', isa => Str, predicate => 'has_api_token');
+has 'api_token' => (is => 'ro', isa => Str, predicate => 'has_api_token', required => 1);
 
 has 'ua' => (
     isa     => InstanceOf['LWP::UserAgent'],
@@ -92,243 +94,538 @@ sub _call {
 
 
 sub get_users {
-    my ($self) = @_;
-    return $self->_call('GET', $api_path . '/users');
+    state $check = compile(Object);
+    my ($self) = $check->(@_);
+    return $self->_call('GET', "$api_path/users");
 }
 
 sub get_user {
-    my ($self, $userid) = @_;
-    return $self->_call('GET', $api_path . '/users/' . $userid);
+    state $check = compile(Object, Int);
+    my ($self, $userid) = $check->(@_);
+    return $self->_call('GET', "$api_path/users/$userid");
 }
 
 sub create_user {
-    my ($self, $data) = @_;
-    return $self->_call('POST', $api_path . '/users', $data);
+    state $check = compile(Object,
+    Dict[
+        username => Str,
+        firstname => Str,
+        lastname => Str,
+        password1 => Str,
+        password2 => Str,
+        email => Str,
+        timezone => Str,
+        account_type => Int,
+        domains => Int,
+        active => Bool,
+        send_report => Bool,
+        spam_checks => Bool,
+        low_score => Num,
+        high_score => Num,
+    ]);
+    my ($self, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/users", $data);
 }
 
 sub update_user {
-    my ($self, $data) = @_;
-    return $self->_call('PUT', $api_path . '/users', $data);
+    state $check = compile(Object,
+    Dict[
+        username => Str,
+        firstname => Str,
+        lastname => Str,
+        email => Str,
+        timezone => Str,
+        domains => Int,
+        active => Bool,
+        send_report => Bool,
+        spam_checks => Bool,
+        low_score => Num,
+        high_score => Num,
+    ]);
+    my ($self, $data) = $check->(@_);
+    # my ($self, $data) = @_;
+    return $self->_call('PUT', "$api_path/users", $data);
 }
 
 sub delete_user {
-    my ($self, $data) = @_;
-    return $self->_call('DELETE', $api_path . '/users', $data);
+    state $check = compile(Object,
+    Dict[
+        username => Str,
+        firstname => Str,
+        lastname => Str,
+        email => Str,
+        timezone => Str,
+        domains => Int,
+        active => Bool,
+        send_report => Bool,
+        spam_checks => Bool,
+        low_score => Num,
+        high_score => Num,
+    ]);
+    my ($self, $data) = $check->(@_);
+    # my ($self, $data) = @_;
+    return $self->_call('DELETE', "$api_path/users", $data);
 }
 
 sub set_user_passwd {
-    my ($self, $userid, $data) = @_;
-    return $self->_call('POST', $api_path . '/users/chpw/' . $userid);
+    state $check = compile(Object, Int,
+    Dict[
+        password1 => Str,
+        password2 => Str,
+    ]);
+    my ($self, $userid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/users/chpw/$userid");
 }
 
 sub get_aliases {
-    my ($self, $addressid) = @_;
-    return $self->_call('GET', $api_path . '/aliasaddresses/' . $addressid);
+    state $check = compile(Object, Int);
+    my ($self, $addressid) = $check->(@_);
+    return $self->_call('GET', "$api_path/aliasaddresses/$addressid");
 }
 
 sub create_alias {
-    my ($self, $userid, $data) = @_;
-    return $self->_call('POST', $api_path . '/aliasaddresses/' . $userid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        address => Str,
+        enabled => Bool,
+    ]);
+    my ($self, $userid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/aliasaddresses/$userid", $data);
 }
 
 sub update_alias {
-    my ($self, $addressid, $data) = @_;
-    return $self->_call('PUT', $api_path . '/aliasaddresses/' . $addressid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        address => Str,
+        enabled => Bool,
+    ]);
+    my ($self, $addressid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/aliasaddresses/$addressid", $data);
 }
 
 sub delete_alias {
-    my ($self, $addressid, $data) = @_;
-    return $self->_call('DELETE', $api_path . '/aliasaddresses/' . $addressid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        address => Str,
+        enabled => Bool,
+    ]);
+    my ($self, $addressid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/aliasaddresses/$addressid", $data);
 }
 
 sub get_domains {
-    my ($self) = @_;
-    return $self->_call('GET', $api_path . '/domains');
+    state $check = compile(Object);
+    my ($self) = $check->(@_);
+    return $self->_call('GET', "$api_path/domains");
 }
 
 sub get_domain {
-    my ($self, $domainid) = @_;
-    return $self->_call('GET', $api_path . '/domains/' . $domainid);
+    state $check = compile(Object, Int);
+    my ($self, $domainid) = $check->(@_);
+    return $self->_call('GET', "$api_path/domains/$domainid");
 }
 
 sub create_domain {
-    my ($self, $data) = @_;
-    return $self->_call('POST', $api_path . '/domains', $data);
+    state $check = compile(Object,
+    Dict[
+        name => Str,
+        site_url => Str,
+        status => Bool,
+        smtp_callout => Bool,
+        ldap_callout => Bool,
+        virus_checks => Bool,
+        virus_checks_at_smtp => Bool,
+        spam_checks => Bool,
+        spam_actions => Num,
+        highspam_actions => Num,
+        virus_actions => Num,
+        low_score => Num,
+        high_score => Num,
+        message_size => Str,
+        delivery_mode => Num,
+        language => Str,
+        timezone => Str,
+        report_every => Num,
+        organizations => Num
+    ]);
+    my ($self, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/domains", $data);
 }
 
 sub update_domain {
-    my ($self, $domainid, $data) = @_;
-    return $self->_call('PUT', $api_path . '/domains/' . $domainid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        name => Str,
+        site_url => Str,
+        status => Bool,
+        smtp_callout => Bool,
+        ldap_callout => Bool,
+        virus_checks => Bool,
+        virus_checks_at_smtp => Bool,
+        spam_checks => Bool,
+        spam_actions => Num,
+        highspam_actions => Num,
+        virus_actions => Num,
+        low_score => Num,
+        high_score => Num,
+        message_size => Str,
+        delivery_mode => Num,
+        language => Str,
+        timezone => Str,
+        report_every => Num,
+        organizations => Num
+    ]);
+    my ($self, $domainid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/domains/$domainid", $data);
 }
 
 sub delete_domain {
-    my ($self, $domainid) = @_;
-    return $self->_call('DELETE', $api_path . '/domains/' . $domainid);
+    state $check = compile(Object, Int);
+    my ($self, $domainid) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/domains/$domainid");
 }
 
 sub get_domainaliases {
-    my ($self, $domainid) = @_;
-    return $self->_call('GET', $api_path . '/domainaliases/' . $domainid);
+    state $check = compile(Object, Int);
+    my ($self, $domainid) = $check->(@_);
+    return $self->_call('GET', "$api_path/domainaliases/$domainid");
 }
 
 sub get_domainalias {
-    my ($self, $domainid, $aliasid) = @_;
-    return $self->_call('GET', $api_path . '/domainaliases/' . $domainid . '/' . $aliasid);
+    state $check = compile(Object, Int, Int);
+    my ($self, $domainid, $aliasid) = $check->(@_);
+    return $self->_call('GET', "$api_path/domainaliases/$domainid/$aliasid");
 }
 
 sub create_domainalias {
-    my ($self, $domainid, $data) = @_;
-    return $self->_call('POST', $api_path . '/domainaliases/' . $domainid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        name => Str,
+        status => Bool,
+        domain => Int
+    ]);
+    my ($self, $domainid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/domainaliases/$domainid", $data);
 }
 
 sub update_domainalias {
-    my ($self, $domainid, $aliasid, $data) = @_;
-    return $self->_call('PUT', $api_path . '/domainaliases/' . $domainid . '/' . $aliasid, $data);
+    state $check = compile(Object, Int, Int,
+    Dict[
+        name => Str,
+        status => Bool,
+        domain => Int
+    ]);
+    my ($self, $domainid, $aliasid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/domainaliases/$domainid/$aliasid", $data);
 }
 
 sub delete_domainalias {
-    my ($self, $domainid, $aliasid, $data) = @_;
-    return $self->_call('DELETE', $api_path . '/domainaliases/' . $domainid . '/' . $aliasid, $data);
+    state $check = compile(Object, Int, Int,
+    Dict[
+        name => Str,
+        status => Bool,
+        domain => Int
+    ]);
+    my ($self, $domainid, $aliasid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/domainaliases/$domainid/$aliasid", $data);
 }
 
 sub get_deliveryservers {
-    my ($self, $domainid) = @_;
-    return $self->_call('GET', $api_path . '/deliveryservers/' . $domainid);
+    state $check = compile(Object, Int);
+    my ($self, $domainid) = $check->(@_);
+    return $self->_call('GET', "$api_path/deliveryservers/$domainid");
 }
 
 sub get_deliveryserver {
-    my ($self, $domainid, $serverid) = @_;
-    return $self->_call('GET', $api_path . '/deliveryservers/' . $domainid . '/' . $serverid);
+    state $check = compile(Object, Int, Int);
+    my ($self, $domainid, $serverid) = $check->(@_);
+    return $self->_call('GET', "$api_path/deliveryservers/$domainid/$serverid");
 }
 
 sub create_deliveryserver {
-    my ($self, $domainid) = @_;
-    return $self->_call('POST', $api_path . '/deliveryservers/' . $domainid);
+    state $check = compile(Object, Int,
+    Dict[
+     address => Str,
+     protocol => Int,
+     port => Int,
+     enabled => Bool
+    ]);
+    my ($self, $domainid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/deliveryservers/$domainid", $data);
 }
 
 sub update_deliveryserver {
-    my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('PUT', $api_path . '/deliveryservers/' . $domainid . '/' . $serverid, $data);
+    state $check = compile(Object, Int, Int,
+    Dict[
+     address => Str,
+     protocol => Int,
+     port => Int,
+     enabled => Bool
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/deliveryservers/$domainid/$serverid", $data);
 }
 
 sub delete_deliveryserver {
-    my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('DELETE', $api_path . '/deliveryservers/' . $domainid . '/' . $serverid, $data);
+    state $check = compile(Object, Int, Int,
+    Dict[
+        address => Str,
+        protocol => Int,
+        port => Int,
+        enabled => Bool
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/deliveryservers/$domainid/$serverid", $data);
 }
 
 sub get_authservers {
-    my ($self, $domainid) = @_;
-    return $self->_call('GET', $api_path . '/authservers/' . $domainid);
+    state $check = compile(Object, Int);
+    my ($self, $domainid) = $check->(@_);
+    return $self->_call('GET', "$api_path/authservers/$domainid");
 }
 
 sub get_authserver {
-    my ($self, $domainid, $serverid) = @_;
-    return $self->_call('GET', $api_path . '/authservers/' . $domainid . '/' . $serverid);
+    state $check = compile(Object, Int, Int);
+    my ($self, $domainid, $serverid) = $check->(@_);
+    return $self->_call('GET', "$api_path/authservers/$domainid/$serverid");
 }
 
 sub create_authserver {
-    my ($self, $domainid, $data) = @_;
-    return $self->_call('POST', $api_path . '/authservers/' . $domainid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        address => Str,
+        protocol => Int,
+        port => Int,
+        enabled => Bool,
+        split_address => Bool,
+        user_map_template => Str
+    ]);
+    my ($self, $domainid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/authservers/$domainid", $data);
 }
 
 sub update_authserver {
-    my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('PUT', $api_path . '/authservers/' . $domainid . '/' . $serverid, $data);
+    state $check = compile(Object, Int, Int,
+    Dict[
+        address => Str,
+        protocol => Int,
+        port => Int,
+        enabled => Bool,
+        split_address => Bool,
+        user_map_template => Str
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/authservers/$domainid/$serverid", $data);
 }
 
 sub delete_authserver {
-    my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('DELETE', $api_path . '/authservers/' . $domainid . '/' . $serverid, $data);
+    state $check = compile(Object, Int, Int,
+    Dict[
+        address => Str,
+        protocol => Int,
+        port => Int,
+        enabled => Bool,
+        split_address => Bool,
+        user_map_template => Str
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/authservers/$domainid/$serverid", $data);
 }
 
 sub get_ldapsettings {
-    my ($self, $domainid, $serverid, $settingsid) = @_;
-    return $self->_call('GET', $api_path . '/ldapsettings/' . $domainid . '/' . $serverid . '/' . $settingsid);
+    state $check = compile(Object, Int, Int, Int);
+    my ($self, $domainid, $serverid, $settingsid) = $check->(@_);
+    return $self->_call('GET', "$api_path/ldapsettings/$domainid/$serverid/$settingsid");
 }
 
 sub create_ldapsettings {
-    my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('POST', $api_path . '/ldapsettings/' . $domainid . '/' . $serverid, $data);
+    state $check = compile(Object, Int, Int,
+    Dict[
+        basedn => Str,
+        nameattribute => Str,
+        emailattribute => Str,
+        binddn => Str,
+        bindpw => Str,
+        usetls => Bool,
+        search_scope => Str,
+        emailsearch_scope => Str
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/ldapsettings/$domainid/$serverid", $data);
 }
 
 sub update_ldapsettings {
-    my ($self, $domainid, $serverid, $settingsid, $data) = @_;
-    return $self->_call('PUT', $api_path . '/ldapsettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
+    state $check = compile(Object, Int, Int, Int,
+    Dict[
+        basedn => Str,
+        nameattribute => Str,
+        emailattribute => Str,
+        binddn => Str,
+        bindpw => Str,
+        usetls => Bool,
+        search_scope => Str,
+        emailsearch_scope => Str
+    ]);
+    my ($self, $domainid, $serverid, $settingsid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/ldapsettings/$domainid/$serverid/$settingsid", $data);
 }
 
 sub delete_ldapsettings {
-    my ($self, $domainid, $serverid, $settingsid, $data) = @_;
-    return $self->_call('DELETE', $api_path . '/ldapsettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
+    state $check = compile(Object, Int, Int, Int,
+    Dict[
+        basedn => Str,
+        nameattribute => Str,
+        emailattribute => Str,
+        binddn => Str,
+        bindpw => Str,
+        usetls => Bool,
+        search_scope => Str,
+        emailsearch_scope => Str
+    ]);
+    my ($self, $domainid, $serverid, $settingsid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/ldapsettings/$domainid/$serverid/$settingsid", $data);
 }
 
 sub get_radiussettings {
-    my ($self, $domainid, $serverid, $settingsid) = @_;
-    return $self->_call('GET', $api_path . '/radiussettings/' . $domainid . '/' . $serverid . '/' . $settingsid);
+    state $check = compile(Object, Int, Int, Int);
+    my ($self, $domainid, $serverid, $settingsid) = $check->(@_);
+    return $self->_call('GET', "$api_path/radiussettings/$domainid/$serverid/$settingsid");
 }
 
 sub create_radiussettings {
-    my ($self, $domainid, $serverid, $data) = @_;
-    return $self->_call('POST', $api_path . '/radiussettings/' . $domainid . '/' . $serverid, $data);
+    state $check = compile(Object, Int, Int,
+    Dict[
+        secret => Str,
+        timeout => Int
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/radiussettings/$domainid/$serverid", $data);
 }
 
 sub update_radiussettings {
-    my ($self, $domainid, $serverid, $settingsid, $data) = @_;
-    return $self->_call('PUT', $api_path . '/radiussettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
+    state $check = compile(Object, Int, Int, Int,
+    Dict[
+        secret => Str,
+        timeout => Int
+    ]);
+    my ($self, $domainid, $serverid, $settingsid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/radiussettings/$domainid/$serverid/$settingsid", $data);
 }
 
 sub delete_radiussettings {
-    my ($self, $domainid, $serverid, $settingsid, $data) = @_;
-    return $self->_call('DELETE', $api_path . '/radiussettings/' . $domainid . '/' . $serverid . '/' . $settingsid, $data);
+    state $check = compile(Object, Int, Int, Int,
+    Dict[
+        secret => Str,
+        timeout => Int
+    ]);
+    my ($self, $domainid, $serverid, $settingsid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/radiussettings/$domainid/$serverid/$settingsid", $data);
 }
 
 sub get_organizations {
-    my ($self) = @_;
-    return $self->_call('GET', $api_path . '/organizations');
+    state $check = compile(Object);
+    my ($self) = $check->(@_);
+    return $self->_call('GET', "$api_path/organizations");
 }
 
 sub get_organization {
-    my ($self, $orgid) = @_;
-    return $self->_call('GET', $api_path . '/organizations/' . $orgid);
+    state $check = compile(Object, Int);
+    my ($self, $orgid) = $check->(@_);
+    return $self->_call('GET', "$api_path/organizations/$orgid");
 }
 
 sub create_organization {
-    my ($self, $data) = @_;
-    return $self->_call('POST', $api_path . '/organizations', $data);
+    state $check = compile(Object,
+    Dict[
+        name => Str,
+        domains => ArrayRef,
+        admins => ArrayRef
+    ]);
+    my ($self, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/organizations", $data);
 }
 
 sub update_organization {
-    my ($self, $orgid, $data) = @_;
-    return $self->_call('PUT', $api_path . '/organizations/' . $orgid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        name => Str,
+        domains => ArrayRef,
+        admins => ArrayRef
+    ]);
+    my ($self, $orgid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/organizations/$orgid", $data);
 }
 
 sub delete_organization {
-    my ($self, $orgid) = @_;
-    return $self->_call('DELETE', $api_path . '/organizations/' . $orgid);
+    state $check = compile(Object, Int);
+    my ($self, $orgid) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/organizations/$orgid");
 }
 
 sub get_relay {
-    my ($self, $relayid) = @_;
-    return $self->_call('GET', $api_path . '/relays/' . $relayid);
+    state $check = compile(Object, Int);
+    my ($self, $relayid) = $check->(@_);
+    return $self->_call('GET', "$api_path/relays/$relayid");
 }
 
 sub create_relay {
-    my ($self, $orgid, $data) = @_;
-    return $self->_call('POST', $api_path . '/relays/' . $orgid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        address => Str,
+        enabled => Bool,
+        username => Str,
+        password1 => Str,
+        password2 => Str,
+        description => Str,
+        low_score => Num,
+        high_score => Num,
+        spam_actions => Int,
+        highspam_actions => Int,
+    ]);
+    my ($self, $orgid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/relays/$orgid", $data);
 }
 
 sub update_relay {
-    my ($self, $relayid, $data) = @_;
-    return $self->_call('PUT', $api_path . '/relays/' . $relayid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        address => Str,
+        enabled => Bool,
+        username => Str,
+        password1 => Str,
+        password2 => Str,
+        description => Str,
+        low_score => Num,
+        high_score => Num,
+        spam_actions => Int,
+        highspam_actions => Int,
+    ]);
+    my ($self, $relayid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/relays/$relayid", $data);
 }
 
 sub delete_relay {
-    my ($self, $relayid, $data) = @_;
-    return $self->_call('DELETE', $api_path . '/relays/' . $relayid, $data);
+    state $check = compile(Object, Int,
+    Dict[
+        address => Str,
+        enabled => Bool,
+        username => Str,
+        password1 => Str,
+        password2 => Str,
+        description => Str,
+        low_score => Num,
+        high_score => Num,
+        spam_actions => Int,
+        highspam_actions => Int,
+    ]);
+    my ($self, $relayid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/relays/$relayid", $data);
 }
 
 sub get_status {
-    my ($self) = @_;
-    return $self->_call('GET', $api_path . '/status');
+    state $check = compile(Object);
+    my ($self) = $check->(@_);
+    return $self->_call('GET', "$api_path/status");
 }
 
 no Moo;
@@ -368,51 +665,363 @@ Read L<Net::BaruwaAPI> for API usage.
         api_url => 'https://baruwa.example.com'
     );
 
+=head1 DESCRIPTION
+
+This module implements Baruwa Enterprise Editions RESTful API.
+
+=attr api_token
+
+The OAUTH authorization token.
+
+=attr api_url
+
+The Baruwa server url
+
 =head1 METHODS
 
 =head2 get_users
 
     my $data = $api->get_users();
 
+    for ($data->{items}) {
+        say $_->{username};
+    }
+
+Lists user accounts on the server.
+
+More info: L<< https://www.baruwa.com/docs/api/#list-all-accounts >>.
+
 =head2 get_user($userid)
 
     my $data = $api->get_user($userid);
+
+B<Arguments:>
+
+=over
+
+=item C<Int> $userid
+
+The user id.
+
+=back
+
+Retrieves the specified user account.
+
+More info: L<< https://www.baruwa.com/docs/api/#retrieve-an-existing-account >>.
 
 =head2 create_user($data)
 
     my $data = $api->create_user($data);
 
+B<Arguments:>
+
+=over
+
+=item C<Str> $data{username}
+
+The username.
+
+=item C<Str> $data{firstname}
+
+The firstname.
+
+=item C<Str> $data{lastname}
+
+The last name.
+
+=item C<Str> $data{email}
+
+The email address
+
+=item C<Str> $data{password1}
+
+The password.
+
+=item C<Str> $data{password2}
+
+The password confirmation.
+
+=item C<Int> $data{account_type}
+
+The account type.
+
+=item C<Str> $data{low_score}
+
+The probable spam score.
+
+=item C<Int> $data{active}
+
+Account status.
+
+=item C<Str> $data{timezone}
+
+The user timezone.
+
+=item C<Str> $data{spam_checks}
+
+Enable spam checks.
+
+=item C<Str> $data{high_score}
+
+Definite spam score.
+
+=item C<Str> $data{send_report}
+
+Send reports.
+
+=item C<Str> $data{domains}
+
+The domains the user belongs to.
+
+=back
+
+Creates a new user account.
+
+More info: L<< https://www.baruwa.com/docs/api/#create-a-new-account >>.
+
 =head2 update_user($data)
 
     my $data = $api->update_user($data);
+
+B<Arguments:>
+
+=over
+
+=item C<Str> $data{username}
+
+The username.
+
+=item C<Str> $data{firstname}
+
+The firstname.
+
+=item C<Str> $data{lastname}
+
+The last name.
+
+=item C<Str> $data{email}
+
+The email address
+
+=item C<Str> $data{password1}
+
+The password.
+
+=item C<Str> $data{password2}
+
+The password confirmation.
+
+=item C<Int> $data{account_type}
+
+The account type.
+
+=item C<Str> $data{low_score}
+
+The probable spam score.
+
+=item C<Int> $data{active}
+
+Account status.
+
+=item C<Str> $data{timezone}
+
+The user timezone.
+
+=item C<Str> $data{spam_checks}
+
+Enable spam checks.
+
+=item C<Str> $data{high_score}
+
+Definite spam score.
+
+=item C<Str> $data{send_report}
+
+Send reports.
+
+=item C<Str> $data{domains}
+
+The domains the user belongs to.
+
+=back
+
+Updates a user account.
+
+More info: L<< https://www.baruwa.com/docs/api/#update-an-account >>.
 
 =head2 delete_user($data)
 
     my $data = $api->delete_user($data);
 
+B<Arguments:>
+
+=over
+
+=item C<Str> $data{username}
+
+The username.
+
+=item C<Str> $data{firstname}
+
+The firstname.
+
+=item C<Str> $data{lastname}
+
+The last name.
+
+=item C<Str> $data{email}
+
+The email address
+
+=item C<Str> $data{password1}
+
+The password.
+
+=item C<Str> $data{password2}
+
+The password confirmation.
+
+=item C<Int> $data{account_type}
+
+The account type.
+
+=item C<Str> $data{low_score}
+
+The probable spam score.
+
+=item C<Int> $data{active}
+
+Account status.
+
+=item C<Str> $data{timezone}
+
+The user timezone.
+
+=item C<Str> $data{spam_checks}
+
+Enable spam checks.
+
+=item C<Str> $data{high_score}
+
+Definite spam score.
+
+=item C<Str> $data{send_report}
+
+Send reports.
+
+=item C<Str> $data{domains}
+
+The domains the user belongs to.
+
+=back
+
+Deletes a user account
+
+More info: L<< https://www.baruwa.com/docs/api/#delete-an-account >>.
+
 =head2 set_user_passwd($userid, $data)
 
     my $data = $api->set_user_passwd($userid, $data);
+
+B<Arguments:>
+
+=over
+
+=item C<Str> $data{password1}
+
+The password.
+
+=item C<Str> $data{password2}
+
+The password confirmation.
+
+=back
+
+Changes a user password.
+
+More info: L<< https://www.baruwa.com/docs/api/#change-a-password >>.
 
 =head2 get_aliases($addressid)
 
     my $data = $api->get_aliases($addressid);
 
+B<Arguments:>
+
+=over
+
+=item C<Int> $addressid
+
+The alias address id.
+
+=back
+
+Retrieves a user account's email alias addresses.
+
 =head2 create_alias($userid, $data)
 
-    my $data = $api->create_alias($userid, $data);
+my $data = $api->create_alias($userid, $data);
+
+B<Arguments:>
+
+=over
+
+=item C<Int> $userid
+
+The user id.
+
+=item C<Str> $data{enabled}
+
+Enable the address.
+
+=item C<Str> $data{address}
+
+The alias address.
+
+=back
+
+Creates an alias address.
+
+More info: L<< https://www.baruwa.com/docs/api/#create-an-alias-address >>.
 
 =head2 update_alias($addressid, $data)
 
     my $data = $api->update_alias($addressid, $data);
 
+B<Arguments:>
+
+=over
+
+=item C<Int> $addressid
+
+The alias address id.
+
+=item C<Str> $data{enabled}
+
+Enable the address.
+
+=item C<Str> $data{address}
+
+The alias address.
+
+=back
+
+Updates an alias address.
+
+More info: L<< https://www.baruwa.com/docs/api/#update-an-alias-address >>.
+
 =head2 delete_alias($addressid, $data)
 
     my $data = $api->delete_alias($addressid, $data);
 
+Deletes an alias address
+
+More info: L<< https://www.baruwa.com/docs/api/#delete-an-alias-address >>.
+
 =head2 get_domains
 
     my $data = $api->get_domains();
+
+More info: L<< https://www.baruwa.com/docs/api/#list-all-domains >>.
 
 =head2 get_domain($domainid)
 
