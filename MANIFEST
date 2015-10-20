@@ -16,6 +16,9 @@ t/radiussettings.t
 t/relays.t
 t/status.t
 t/users.t
+t/lib/Test/Net/BaruwaAPI.pm
+t/responses/create_user
 Makefile.PL
+cpanfile
 META.yml
 META.json
