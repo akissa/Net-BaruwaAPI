@@ -8,7 +8,14 @@ perl:
     - "5.10"
 install:
     - cpanm -v --installdeps --notest .
-script: "perl Build.PL; ./Build test"
+before_script:
+  - cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov
+script:
+  - perl Build.PL
+  - ./Build build
+  - cover -test
+after_success:
+  - cover -report codecov
 branches:
     only:
         - master
