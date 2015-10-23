@@ -10,6 +10,8 @@ Perl bindings for the Baruwa REST API
 
 =for HTML <a href="https://codecov.io/github/akissa/Net-BaruwaAPI?branch=master"><img src="https://codecov.io/github/akissa/Net-BaruwaAPI/coverage.svg?branch=master" alt="Coverage via Codecov" /></a>
 
+=for HTML <a href="https://www.mozilla.org/MPL/2.0/"><img src="https://img.shields.io/badge/license-MPLv2-blue.svg?style=flat-square" /></a>
+
 
 =head2 Installation
 
