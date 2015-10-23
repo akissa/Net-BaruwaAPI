@@ -7,6 +7,7 @@
 Perl bindings for the Baruwa REST API
 
 =for HTML <a href="https://travis-ci.org/akissa/Net-BaruwaAPI"><img src="https://travis-ci.org/akissa/Net-BaruwaAPI.svg?branch=master" /></a>
+
 =for HTML <a href="https://codecov.io/github/akissa/Net-BaruwaAPI?branch=master"><img src="https://codecov.io/github/akissa/Net-BaruwaAPI/coverage.svg?branch=master" alt="Coverage via Codecov" /></a>
 
 

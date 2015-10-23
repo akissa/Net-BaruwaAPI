@@ -669,13 +669,19 @@ Read L<Net::BaruwaAPI> for API usage.
 
 This module implements Baruwa Enterprise Editions RESTful API.
 
-=attr api_token
+=head2 ATTRIBUTES
+
+=over
+
+=item api_token
 
 The OAUTH authorization token.
 
-=attr api_url
+=item api_url
 
 The Baruwa server url
+
+=back
 
 =head1 METHODS
 
