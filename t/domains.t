@@ -37,6 +37,7 @@ my $data = {
 };
 
 my $domainid = 1;
+my $domain_name = 'example.net';
 
 set_expected_response('get_domains');
 
@@ -53,6 +54,12 @@ $res = $do->get_domain($domainid);
 # ok($res, 'the get_domain response is defined');
 is(get_last_request_method(), 'GET', 'the request method is correct');
 is(get_last_request_path(), "/api/v1/domains/$domainid", 'the request uri is correct');
+
+$res = $do->get_domain_by_name($domain_name);
+
+# ok($res, 'the get_domain response is defined');
+is(get_last_request_method(), 'GET', 'the request method is correct');
+is(get_last_request_path(), "/api/v1/domains/byname/$domain_name", 'the request uri is correct');
 
 set_expected_response('create_domain');
 

@@ -67,7 +67,7 @@ You can also look for information at:
 
 =head2 License and Copyright
 
-Copyright (C) 2015 Andrew Colin Kissa
+Copyright (C) 2015-2016 Andrew Colin Kissa
 
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this

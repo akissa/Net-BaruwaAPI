@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: ai ts=4 sts=4 et sw=4
 # Net::BaruwaAPI Perl bindings for the Baruwa REST API
-# Copyright (C) 2015 Andrew Colin Kissa <andrew@topdog.za.net>
+# Copyright (C) 2015-2016 Andrew Colin Kissa <andrew@topdog.za.net>
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
@@ -18,7 +18,7 @@ use Type::Params qw/compile/;
 use Types::Standard qw(Str InstanceOf Object Int Bool Dict Num ArrayRef);
 use Moo;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:DATOPDOG';
 
 my $api_path = '/api/v1';
@@ -223,6 +223,12 @@ sub get_domain {
     state $check = compile(Object, Int);
     my ($self, $domainid) = $check->(@_);
     return $self->_call('GET', "$api_path/domains/$domainid");
+}
+
+sub get_domain_by_name {
+    state $check = compile(Object, Str);
+    my ($self, $domain_name) = $check->(@_);
+    return $self->_call('GET', "$api_path/domains/byname/$domain_name");
 }
 
 sub create_domain {
