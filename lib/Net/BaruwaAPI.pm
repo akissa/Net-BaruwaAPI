@@ -1348,6 +1348,26 @@ More info: L<< https://www.baruwa.com/docs/api/#list-all-domains >>.
 
     my $data = $api->delete_deliveryserver($domainid, $serverid, $data);
 
+=head2 get_user_deliveryservers($domainid)
+
+    my $data = $api->get_user_deliveryservers($domainid);
+
+=head2 get_user_deliveryserver($domainid, $serverid)
+
+    my $data = $api->get_user_deliveryserver($domainid, $serverid);
+
+=head2 create_user_deliveryserver($domainid, $data)
+
+    my $data = $api->create_user_deliveryserver($domainid, $data);
+
+=head2 update_user_deliveryserver($domainid, $serverid, $data)
+
+    my $data = $api->update_user_deliveryserver($domainid, $serverid, $data);
+
+=head2 delete_user_deliveryserver($domainid, $serverid, $data)
+
+    my $data = $api->delete_user_deliveryserver($domainid, $serverid, $data);
+
 =head2 get_authservers($domainid)
 
     my $data = $api->get_authservers($domainid);
@@ -1400,6 +1420,26 @@ More info: L<< https://www.baruwa.com/docs/api/#list-all-domains >>.
 
     my $data = $api->delete_radiussettings($domainid, $serverid, $settingsid, $data);
 
+=head2 get_domain_smarthosts($domainid)
+
+    my $data = $api->get_domain_smarthosts($domainid);
+
+=head2 get_domain_smarthost($domainid, $serverid)
+
+    my $data = $api->get_domain_smarthost($domainid, $serverid);
+
+=head2 create_domain_smarthost($domainid, $data)
+
+    my $data = $api->create_domain_smarthost($domainid, $data);
+
+=head2 update_domain_smarthost($domainid, $serverid, $data)
+
+    my $data = $api->update_domain_smarthost($domainid, $serverid, $data);
+
+=head2 delete_domain_smarthost($domainid, $serverid, $data)
+
+    my $data = $api->delete_domain_smarthost($domainid, $serverid, $data);
+
 =head2 get_organizations
 
     my $data = $api->get_organizations();
@@ -1420,6 +1460,26 @@ More info: L<< https://www.baruwa.com/docs/api/#list-all-domains >>.
 
     my $data = $api->delete_organization($orgid);
 
+=head2 get_fallbackservers($orgid)
+
+    my $data = $api->get_fallbackservers($orgid);
+
+=head2 get_fallbackserver($serverid)
+
+    my $data = $api->get_fallbackserver($serverid);
+
+=head2 create_fallbackserver($orgid, $data)
+
+    my $data = $api->create_fallbackserver($orgid, $data);
+
+=head2 update_fallbackserver($serverid, $data)
+
+    my $data = $api->update_fallbackserver($serverid, $data);
+
+=head2 delete_fallbackserver($serverid, $data)
+
+    my $data = $api->delete_fallbackserver($serverid, $data);
+
 =head2 get_relay($relayid)
 
     my $data = $api->get_relay($relayid);
@@ -1435,6 +1495,26 @@ More info: L<< https://www.baruwa.com/docs/api/#list-all-domains >>.
 =head2 delete_relay($relayid, $data)
 
     my $data = $api->delete_relay($relayid, $data);
+
+=head2 get_org_smarthosts($orgid)
+
+    my $data = $api->get_org_smarthosts($orgid);
+
+=head2 get_org_smarthost($orgid, $serverid)
+
+    my $data = $api->get_org_smarthost($orgid, $serverid);
+
+=head2 create_org_smarthost($orgid, $data)
+
+    my $data = $api->create_org_smarthost($orgid, $data);
+
+=head2 update_org_smarthost($orgid, $serverid, $data)
+
+    my $data = $api->update_org_smarthost($orgid, $serverid, $data);
+
+=head2 delete_org_smarthost($orgid, $serverid, $data)
+
+    my $data = $api->delete_org_smarthost($orgid, $serverid, $data);
 
 =head2 get_status
 
