@@ -401,6 +401,60 @@ sub delete_deliveryserver {
     return $self->_call('DELETE', "$api_path/deliveryservers/$domainid/$serverid", $data);
 }
 
+sub get_user_deliveryservers {
+    state $check = compile(Object, Int);
+    my ($self, $domainid) = $check->(@_);
+    return $self->_call('GET', "$api_path/userdeliveryservers/$domainid");
+}
+
+sub get_user_deliveryserver {
+    state $check = compile(Object, Int, Int);
+    my ($self, $domainid, $serverid) = $check->(@_);
+    return $self->_call('GET', "$api_path/userdeliveryservers/$domainid/$serverid");
+}
+
+sub create_user_deliveryserver {
+    state $check = compile(Object, Int,
+    Dict[
+     address => Str,
+     protocol => Int,
+     port => Int,
+     require_tls => Bool,
+     verification_only => Bool,
+     enabled => Bool
+    ]);
+    my ($self, $domainid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/userdeliveryservers/$domainid", $data);
+}
+
+sub update_user_deliveryserver {
+    state $check = compile(Object, Int, Int,
+    Dict[
+     address => Str,
+     protocol => Int,
+     port => Int,
+     require_tls => Bool,
+     verification_only => Bool,
+     enabled => Bool
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/userdeliveryservers/$domainid/$serverid", $data);
+}
+
+sub delete_user_deliveryserver {
+    state $check = compile(Object, Int, Int,
+    Dict[
+        address => Str,
+        protocol => Int,
+        port => Int,
+        require_tls => Bool,
+        verification_only => Bool,
+        enabled => Bool
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/userdeliveryservers/$domainid/$serverid", $data);
+}
+
 sub get_authservers {
     state $check = compile(Object, Int);
     my ($self, $domainid) = $check->(@_);
