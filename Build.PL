@@ -35,6 +35,11 @@ my $builder = Module::Build->new(
     },
     add_to_cleanup     => [ 'Net-BaruwaAPI-*' ],
     create_makefile_pl => 'traditional',
+    meta_merge => {
+        resources => {
+            repository => 'https://github.com/akissa/Net-BaruwaAPI'
+        }
+    },
 );
 
 $builder->create_build_script();
