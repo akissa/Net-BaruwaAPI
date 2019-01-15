@@ -455,6 +455,63 @@ sub delete_user_deliveryserver {
     return $self->_call('DELETE', "$api_path/userdeliveryservers/$domainid/$serverid", $data);
 }
 
+sub get_domain_smarthosts {
+    state $check = compile(Object, Int);
+    my ($self, $domainid) = $check->(@_);
+    return $self->_call('GET', "$api_path/domains/smarthosts/$domainid");
+}
+
+sub get_domain_smarthost {
+    state $check = compile(Object, Int, Int);
+    my ($self, $domainid, $serverid) = $check->(@_);
+    return $self->_call('GET', "$api_path/domains/smarthosts/$domainid/$serverid");
+}
+
+sub create_domain_smarthost {
+    state $check = compile(Object, Int,
+    Dict[
+        address => Str,
+        username => Str,
+        password => Str,
+        port => Int,
+        require_tls => Bool,
+        enabled => Bool,
+        description => Str,
+    ]);
+    my ($self, $domainid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/domains/smarthosts/$domainid", $data);
+}
+
+sub update_domain_smarthost {
+    state $check = compile(Object, Int, Int,
+    Dict[
+        address => Str,
+        username => Str,
+        password => Str,
+        port => Int,
+        require_tls => Bool,
+        enabled => Bool,
+        description => Str,
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/domains/smarthosts/$domainid/$serverid", $data);
+}
+
+sub delete_domain_smarthost {
+    state $check = compile(Object, Int, Int,
+    Dict[
+        address => Str,
+        username => Str,
+        password => Str,
+        port => Int,
+        require_tls => Bool,
+        enabled => Bool,
+        description => Str,
+    ]);
+    my ($self, $domainid, $serverid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/domains/smarthosts/$domainid/$serverid", $data);
+}
+
 sub get_fallbackservers {
     state $check = compile(Object, Int);
     my ($self, $orgid) = $check->(@_);
