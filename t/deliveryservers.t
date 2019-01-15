@@ -18,7 +18,9 @@ my $data = {
     address => "192.168.1.151",
     protocol => 1,
     port => 25,
-    enabled => 1
+    enabled => 1,
+    require_tls => 1,
+    verification_only => 1,
 };
 
 my $serverid = 12;

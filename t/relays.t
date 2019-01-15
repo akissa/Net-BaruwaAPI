@@ -18,8 +18,9 @@ my $relayid = 5;
 my $orgid = 23;
 my $data = {
     address => "192.168.1.20",
-    enabled => 1,
     username => "outboundsmtp",
+    enabled => 1,
+    require_tls => 1,
     password1 => "Str0ngP4ss##",
     password2 => "Str0ngP4ss##",
     description => "Backup-outbound-smtp",
@@ -27,6 +28,8 @@ my $data = {
     high_score => 15.0,
     spam_actions => 2,
     highspam_actions => 3,
+    block_macros => 1,
+    ratelimit => 250,
 };
 
 set_expected_response('create_relay');

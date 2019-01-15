@@ -18,7 +18,7 @@ use Type::Params qw/compile/;
 use Types::Standard qw(Str InstanceOf Object Int Bool Dict Num ArrayRef);
 use Moo;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 our $AUTHORITY = 'cpan:DATOPDOG';
 
 my $api_path = '/api/v1';
@@ -122,6 +122,7 @@ sub create_user {
         spam_checks => Bool,
         low_score => Num,
         high_score => Num,
+        block_macros => Bool,
     ]);
     my ($self, $data) = $check->(@_);
     return $self->_call('POST', "$api_path/users", $data);
@@ -141,9 +142,9 @@ sub update_user {
         spam_checks => Bool,
         low_score => Num,
         high_score => Num,
+        block_macros => Bool,
     ]);
     my ($self, $data) = $check->(@_);
-    # my ($self, $data) = @_;
     return $self->_call('PUT', "$api_path/users", $data);
 }
 
@@ -161,6 +162,7 @@ sub delete_user {
         spam_checks => Bool,
         low_score => Num,
         high_score => Num,
+        block_macros => Bool,
     ]);
     my ($self, $data) = $check->(@_);
     # my ($self, $data) = @_;
@@ -237,10 +239,13 @@ sub create_domain {
         name => Str,
         site_url => Str,
         status => Bool,
+        accept_inbound => Bool,
+        discard_mail => Bool,
         smtp_callout => Bool,
         ldap_callout => Bool,
         virus_checks => Bool,
         virus_checks_at_smtp => Bool,
+        block_macros => Bool,
         spam_checks => Bool,
         spam_actions => Num,
         highspam_actions => Num,
@@ -264,10 +269,13 @@ sub update_domain {
         name => Str,
         site_url => Str,
         status => Bool,
+        accept_inbound => Bool,
+        discard_mail => Bool,
         smtp_callout => Bool,
         ldap_callout => Bool,
         virus_checks => Bool,
         virus_checks_at_smtp => Bool,
+        block_macros => Bool,
         spam_checks => Bool,
         spam_actions => Num,
         highspam_actions => Num,
@@ -308,6 +316,7 @@ sub create_domainalias {
     Dict[
         name => Str,
         status => Bool,
+        accept_inbound => Bool,
         domain => Int
     ]);
     my ($self, $domainid, $data) = $check->(@_);
@@ -319,6 +328,7 @@ sub update_domainalias {
     Dict[
         name => Str,
         status => Bool,
+        accept_inbound => Bool,
         domain => Int
     ]);
     my ($self, $domainid, $aliasid, $data) = $check->(@_);
@@ -330,6 +340,7 @@ sub delete_domainalias {
     Dict[
         name => Str,
         status => Bool,
+        accept_inbound => Bool,
         domain => Int
     ]);
     my ($self, $domainid, $aliasid, $data) = $check->(@_);
@@ -354,6 +365,8 @@ sub create_deliveryserver {
      address => Str,
      protocol => Int,
      port => Int,
+     require_tls => Bool,
+     verification_only => Bool,
      enabled => Bool
     ]);
     my ($self, $domainid, $data) = $check->(@_);
@@ -366,6 +379,8 @@ sub update_deliveryserver {
      address => Str,
      protocol => Int,
      port => Int,
+     require_tls => Bool,
+     verification_only => Bool,
      enabled => Bool
     ]);
     my ($self, $domainid, $serverid, $data) = $check->(@_);
@@ -378,6 +393,8 @@ sub delete_deliveryserver {
         address => Str,
         protocol => Int,
         port => Int,
+        require_tls => Bool,
+        verification_only => Bool,
         enabled => Bool
     ]);
     my ($self, $domainid, $serverid, $data) = $check->(@_);
@@ -453,7 +470,10 @@ sub create_ldapsettings {
         binddn => Str,
         bindpw => Str,
         usetls => Bool,
+        usesearch => Bool,
+        searchfilter => Str,
         search_scope => Str,
+        emailsearchfilter => Str,
         emailsearch_scope => Str
     ]);
     my ($self, $domainid, $serverid, $data) = $check->(@_);
@@ -469,7 +489,10 @@ sub update_ldapsettings {
         binddn => Str,
         bindpw => Str,
         usetls => Bool,
+        usesearch => Bool,
+        searchfilter => Str,
         search_scope => Str,
+        emailsearchfilter => Str,
         emailsearch_scope => Str
     ]);
     my ($self, $domainid, $serverid, $settingsid, $data) = $check->(@_);
@@ -485,7 +508,10 @@ sub delete_ldapsettings {
         binddn => Str,
         bindpw => Str,
         usetls => Bool,
+        usesearch => Bool,
+        searchfilter => Str,
         search_scope => Str,
+        emailsearchfilter => Str,
         emailsearch_scope => Str
     ]);
     my ($self, $domainid, $serverid, $settingsid, $data) = $check->(@_);
@@ -578,8 +604,9 @@ sub create_relay {
     state $check = compile(Object, Int,
     Dict[
         address => Str,
-        enabled => Bool,
         username => Str,
+        enabled => Bool,
+        require_tls => Bool,
         password1 => Str,
         password2 => Str,
         description => Str,
@@ -587,6 +614,8 @@ sub create_relay {
         high_score => Num,
         spam_actions => Int,
         highspam_actions => Int,
+        block_macros => Bool,
+        ratelimit => Int
     ]);
     my ($self, $orgid, $data) = $check->(@_);
     return $self->_call('POST', "$api_path/relays/$orgid", $data);
@@ -596,8 +625,9 @@ sub update_relay {
     state $check = compile(Object, Int,
     Dict[
         address => Str,
-        enabled => Bool,
         username => Str,
+        enabled => Bool,
+        require_tls => Bool,
         password1 => Str,
         password2 => Str,
         description => Str,
@@ -605,6 +635,8 @@ sub update_relay {
         high_score => Num,
         spam_actions => Int,
         highspam_actions => Int,
+        block_macros => Bool,
+        ratelimit => Int
     ]);
     my ($self, $relayid, $data) = $check->(@_);
     return $self->_call('PUT', "$api_path/relays/$relayid", $data);
@@ -614,8 +646,9 @@ sub delete_relay {
     state $check = compile(Object, Int,
     Dict[
         address => Str,
-        enabled => Bool,
         username => Str,
+        enabled => Bool,
+        require_tls => Bool,
         password1 => Str,
         password2 => Str,
         description => Str,
@@ -623,6 +656,8 @@ sub delete_relay {
         high_score => Num,
         spam_actions => Int,
         highspam_actions => Int,
+        block_macros => Bool,
+        ratelimit => Int
     ]);
     my ($self, $relayid, $data) = $check->(@_);
     return $self->_call('DELETE', "$api_path/relays/$relayid", $data);

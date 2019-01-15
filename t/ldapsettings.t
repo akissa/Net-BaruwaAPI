@@ -21,7 +21,10 @@ my $data = {
     binddn => "uid=readonly-admin,ou=Users,dc=example,dc=com",
     bindpw => "P4ssW0rd",
     usetls => 1,
+    usesearch => 0,
+    searchfilter => "",
     search_scope => "subtree",
+    emailsearchfilter => "",
     emailsearch_scope => "subtree"
 };
 
