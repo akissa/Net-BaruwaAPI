@@ -7,7 +7,7 @@ use FindBin '$Bin';
 use lib "$Bin/lib";
 use Test::Net::BaruwaAPI;
 
-diag( "Testing Net::BaruwaAPI RADIUS settings methods" );
+diag( "Testing Net::BaruwaAPI domain RADIUS settings methods" );
 
 my $do = Test::Net::BaruwaAPI->new(api_token => 'xxxxxxxasasswqefdff', api_url => 'https://baruwa.example.com');
 isa_ok($do, 'Net::BaruwaAPI');
