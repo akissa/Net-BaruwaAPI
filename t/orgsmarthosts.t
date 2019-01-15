@@ -27,6 +27,14 @@ my $data = {
 my $serverid = 12;
 my $orgid = 1;
 
+set_expected_response('get_org_smarthosts');
+
+$res = $do->get_org_smarthosts($orgid);
+
+# ok($res, 'the get_org_smarthosts response is defined');
+is(get_last_request_method(), 'GET', 'the request method is correct');
+is(get_last_request_path(), "/api/v1/organizations/smarthosts/$orgid", 'the request uri is correct');
+
 set_expected_response('get_org_smarthost');
 
 $res = $do->get_org_smarthost($orgid, $serverid);
