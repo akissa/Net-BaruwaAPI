@@ -455,6 +455,60 @@ sub delete_user_deliveryserver {
     return $self->_call('DELETE', "$api_path/userdeliveryservers/$domainid/$serverid", $data);
 }
 
+sub get_fallbackservers {
+    state $check = compile(Object, Int);
+    my ($self, $orgid) = $check->(@_);
+    return $self->_call('GET', "$api_path/fallbackservers/$orgid");
+}
+
+sub get_fallbackserver {
+    state $check = compile(Object, Int);
+    my ($self, $serverid) = $check->(@_);
+    return $self->_call('GET', "$api_path/fallbackservers/$serverid");
+}
+
+sub create_fallbackserver {
+    state $check = compile(Object, Int,
+    Dict[
+     address => Str,
+     protocol => Int,
+     port => Int,
+     require_tls => Bool,
+     verification_only => Bool,
+     enabled => Bool
+    ]);
+    my ($self, $orgid, $data) = $check->(@_);
+    return $self->_call('POST', "$api_path/fallbackservers/$orgid", $data);
+}
+
+sub update_fallbackserver {
+    state $check = compile(Object, Int,
+    Dict[
+     address => Str,
+     protocol => Int,
+     port => Int,
+     require_tls => Bool,
+     verification_only => Bool,
+     enabled => Bool
+    ]);
+    my ($self, $serverid, $data) = $check->(@_);
+    return $self->_call('PUT', "$api_path/fallbackservers/$serverid", $data);
+}
+
+sub delete_fallbackserver {
+    state $check = compile(Object, Int,
+    Dict[
+        address => Str,
+        protocol => Int,
+        port => Int,
+        require_tls => Bool,
+        verification_only => Bool,
+        enabled => Bool
+    ]);
+    my ($self, $serverid, $data) = $check->(@_);
+    return $self->_call('DELETE', "$api_path/fallbackservers/$serverid", $data);
+}
+
 sub get_authservers {
     state $check = compile(Object, Int);
     my ($self, $domainid) = $check->(@_);
