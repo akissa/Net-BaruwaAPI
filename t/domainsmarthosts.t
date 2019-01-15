@@ -27,6 +27,14 @@ my $data = {
 my $serverid = 12;
 my $domainid = 1;
 
+set_expected_response('get_domain_smarthosts');
+
+$res = $do->get_domain_smarthosts($domainid);
+
+# ok($res, 'the get_domain_smarthosts response is defined');
+is(get_last_request_method(), 'GET', 'the request method is correct');
+is(get_last_request_path(), "/api/v1/domains/smarthosts/$domainid", 'the request uri is correct');
+
 set_expected_response('get_domain_smarthost');
 
 $res = $do->get_domain_smarthost($domainid, $serverid);
