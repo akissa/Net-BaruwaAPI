@@ -10,9 +10,10 @@ perl:
 install:
     - cpanm -v --installdeps --notest .
 before_script:
-  - cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov
+  - cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov Test::Fatal
 script:
   - perl Build.PL
+  - ./Build installdeps
   - ./Build build
   - cover -test
 after_success:
