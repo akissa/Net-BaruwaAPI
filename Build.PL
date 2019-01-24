@@ -37,7 +37,7 @@ my $builder = Module::Build->new(
     create_makefile_pl => 'traditional',
     meta_merge => {
         resources => {
-            repository => 'https://github.com/akissa/Net-BaruwaAPI'
+            repository => 'https://github.com/baruwa-enterprise/Net-BaruwaAPI'
         }
     },
 );
