@@ -18,7 +18,7 @@ use Type::Params qw/compile/;
 use Types::Standard qw(Str InstanceOf Object Int Bool Dict Num ArrayRef Optional);
 use Moo;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:DATOPDOG';
 
 my $api_path = '/api/v1';
