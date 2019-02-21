@@ -26,3 +26,4 @@ Makefile.PL
 cpanfile
 META.yml
 META.json
+LICENSE
